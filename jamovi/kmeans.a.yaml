@@ -14,18 +14,41 @@ options:
             The data as a data frame.
 
     - name: vars
-      title: Variables
+      title: Covariates
       type: Variables
       suggested:
-         - continuous
+        - continuous
       permitted:
-        - numeric  
+        - numeric
+
+    - name: factors
+      title: Factors
+      type: Variables
+      suggested:
+        - nominal
+      permitted:
+        - factor
 
     - name: k
       title: Number of clusters
       default: 2
       type: Integer
-      min: 1
+      min: 2
+
+    - name: k1
+      title: Number of clusters
+      default: 2
+      type: Integer
+      min: 2
+
+    - name: kp
+      title: 'Gower distance'
+      type: Bool
+      default: FALSE
+      
+    - name: clust1
+      title: 'Gower memberships'
+      type: Output
 
     - name: algo
       title: Algorithm
@@ -54,7 +77,7 @@ options:
     - name: plot
       title: Plot of means across clusters
       type: Bool
-      default: TRUE
+      default: FALSE
 
     - name: angle
       title: Angle of x-axis labels

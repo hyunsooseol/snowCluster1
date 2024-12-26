@@ -7,7 +7,7 @@
         `author`="Seol, H.", 
         `year`=2024, 
         `title`="snowCluster: Multivariate Analysis", 
-        `publisher`="(Version 7.4.1) [jamovi module]. URL https://github.com/hyunsooseol/snowCluster", 
+        `publisher`="(Version 7.4.2) [jamovi module]. URL https://github.com/hyunsooseol/snowCluster", 
         `url`="https://github.com/hyunsooseol/snowCluster"), 
     `factoextra`=list(
         `type`="software", 
@@ -80,4 +80,10 @@
         `author`="Fraley, C., Raftery, A., Scrucca, L., Murphy, T., & Fop, M.", 
         `year`=2024, 
         `title`="mclust: Gaussian Mixture Modelling for Model-Based Clustering, Classification, and Density Estimation", 
-        `publisher`="(Version 6.1.1)[R package]. URL https://CRAN.R-project.org/package=mclust"))
+        `publisher`="(Version 6.1.1)[R package]. URL https://CRAN.R-project.org/package=mclust"), 
+    `clustMixType`=list(
+        `type`="software", 
+        `author`="Szepannek, G. & Aschenbruck, R.", 
+        `year`=2024, 
+        `title`="clustMixType: k-Prototypes Clustering for Mixed Variable-Type Data", 
+        `publisher`="(Version 0.4-2)[R package]. URL https://CRAN.R-project.org/package=clustMixType"))

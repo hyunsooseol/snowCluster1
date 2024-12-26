@@ -144,5 +144,30 @@ items:
         - algo
         - nstart
         - stand
-      
+
+    - name: clust1
+      title: 'Gower'
+      type: Output
+      varTitle: Gower
+      measureType: nominal
+      clearWith:
+        - vars
+        - factors
+        - k1
+
+    - name: kp
+      title: 'Gower distance'
+      type: Table
+      visible: (kp)
+      refs: clustMixType
+      clearWith:
+        - vars
+        - factors
+        - k1
+      columns:
+        - name: name
+          title: ''
+          type: 'text'
+          content: ($key)
+  
 ...

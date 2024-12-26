@@ -6,6 +6,7 @@
 #' @importFrom factoextra fviz_pca_var
 #' @importFrom FactoMineR PCA
 #' @importFrom factoextra get_pca_var
+#' @importFrom clustMixType kproto
 #' @import ggplot2
 #' @export
 
@@ -49,6 +50,8 @@ kmeansClass <- if (requireNamespace('jmvcore'))
                     '<div style="border: 2px solid #e6f4fe; border-radius: 15px; padding: 15px; background-color: #e6f4fe; margin-top: 10px;">',
                     '<div style="text-align:justify;">',
                     '<ul>',
+                    '<li>If the variables consist solely of continuous variables, apply K-means clustering analysis.</li>', 
+                    '<li>If the variables are categorical or mixed-type variables, apply Gower distance analysis.</li>',
                     '<li>Feature requests and bug reports can be made on my <a href="https://github.com/hyunsooseol/snowCluster/issues" target="_blank">GitHub</a>.</li>',
                     '</ul></div></div>'
                     
@@ -158,14 +161,15 @@ kmeansClass <- if (requireNamespace('jmvcore'))
             
             .run = function() {
                 
-                     k <- self$options$k
-              
-                if (length(self$options$vars)<= k ) return() 
+                    
+             if (length(self$options$vars)> 2 ){  
                 
                 # Solved Problem that does not change plot using set.seed()
                      set.seed(1234)
                      
+                     k <- self$options$k         
                     vars <- self$options$vars
+                    facs <- self$options$factors
                     
                     data <- self$data
                     
@@ -333,10 +337,90 @@ kmeansClass <- if (requireNamespace('jmvcore'))
                        
                       
                     }
-                
-                   
+             }  
+                  
+                    if(length(self$options$factors)>=1){
                     
-                
+                    if(isTRUE(self$options$kp)){
+                    
+                    k1 <- self$options$k1
+                    vars <- self$options$vars
+                    facs <- self$options$factors
+                    
+                    data <- self$data
+                    
+                    # # convert to appropriate data types
+                    # for (i in seq_along(vars))
+                    #   data[[i]] <- jmvcore::toNumeric(data[[i]])
+                    # 
+                    # #  data[[vars]] <- jmvcore::toNumeric(data[[vars]])
+                    # 
+                    # for (fac in facs)
+                    #   data[[fac]] <- as.factor(data[[fac]])
+                    # 
+                    # # data is now all of the appropriate type we can begin!
+                    # 
+                    # #data <- na.omit(data)
+                    # 
+                    # dat <- jmvcore::select(data, c(self$options$vars,self$options$factors))
+                    # 
+                    
+                    # continuous vars---
+                    if (length(vars) > 0) {  
+                      for (i in seq_along(vars))
+                        data[[vars[i]]] <- jmvcore::toNumeric(data[[vars[i]]])
+                    }
+                    
+                    # factor vars---
+                    if (length(facs) > 0) {  
+                      for (fac in facs)
+                        data[[fac]] <- as.factor(data[[fac]])
+                    }
+                    
+                    # a <- capture.output(summary(data[fac]))
+                    # self$results$text$setContent(paste(a, collapse = "\n"))
+                    
+                    # combine dataset---
+                    selected_vars <- c(vars, facs)
+                    dat <- jmvcore::select(data, selected_vars)
+                    
+                    set.seed(1234)
+                    # Gower distance---
+                    proto <-clustMixType::kproto(dat, k=k1, type = 'gower')
+                    
+                    # Matrix with distances---
+                    #self$results$text1$setContent(proto$dists)
+                    
+                    # Table of Gower distance---
+                    
+                    table <- self$results$kp
+                    mat <- data.frame(proto$dists)
+                    colnames(mat) <-  paste0("Cluster", seq_along(colnames(mat)))
+                    names<- dimnames(mat)[[1]]
+                    dims <- colnames(mat)
+                    
+                    for (dim in dims) {
+                      table$addColumn(name = paste0(dim),
+                                      type = 'text',
+                                      combineBelow=TRUE)
+                    }
+                    for (name in names) {
+                      row <- list()
+                      for(j in seq_along(dims)){
+                        row[[dims[j]]] <- mat[name,j]
+                      }
+                      table$addRow(rowKey=name, values=row)
+                    }
+                    
+                    #cluster number
+                    gn <- proto$cluster
+                    
+                    self$results$clust1$setValues(gn)
+                    self$results$clust1$setRowNums(rownames(data))
+                  
+                  } 
+                    
+                      }  
             },
             
             
