@@ -1,7 +1,7 @@
 Package: snowCluster
 Type: Package
 Title: Multivariate Analysis
-Version: 7.4.2
+Version: 7.4.3
 Author: Hyunsoo Seol
 Maintainer: Hyunsoo Seol <snow@cau.ac.kr>
 Description: This module allows users to analyze k-means and hierarchical
@@ -21,7 +21,11 @@ Imports:
     MASS,
     ggplot2,
     magrittr,
+    forecast,
     ggpubr,
+    caret,
+    party,
+    xgboost,
     rpart.plot,
     neuralnet,
     pls,
@@ -29,16 +33,23 @@ Imports:
     nnet,
     reshape2,
     rstan,
+    prophet,
+    gbm,
+    earth,
     mda,
     MLeval,
+    kernlab,
     caTools,
     lubridate,
     dplyr,
+    RANN,
     lattice,
     caretEnsemble,
     klaR,
     plyr,
+    mboost,
     randomForest,
+    glmnet,
     C50,
     scatterplot3d,
     rpart,
@@ -46,4 +57,8 @@ Imports:
     pvclust,
     widyr,
     tibble,
-    clustMixType
+    ggthemes,
+    mclust,
+    clustMixType,
+Remotes: cardiomoon/multipleROC    
+
