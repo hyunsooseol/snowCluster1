@@ -6,7 +6,6 @@
 #' @importFrom mclust mclustBIC
 #' @import widyr
 #' @import ggplot2 
-#' @import ggplot2
 #' @import ggthemes 
 #' @export
 
