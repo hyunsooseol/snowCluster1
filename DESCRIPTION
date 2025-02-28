@@ -46,5 +46,5 @@ Imports:
     pvclust,
     widyr,
     tibble,
-    clustMixType,
-    RANN 
+    clustMixType
+   
