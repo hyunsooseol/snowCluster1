@@ -17,6 +17,7 @@ options:
       title: Labels (Optional)
       type: Variable
       suggested:
+         - nominal
          - id
       permitted:
         - id
@@ -30,6 +31,12 @@ options:
          - ordinal
       permitted:
         - factor  
+ 
+    - name: nd
+      title: Number of dimensions
+      default: 2
+      type: Integer
+      min: 2
   
     - name: chi
       title: Chi-square test

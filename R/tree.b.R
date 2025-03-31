@@ -1,22 +1,12 @@
 
 # This file is a generated template, your changes will not be overwritten
-#' @importFrom caret createDataPartition
-#' @importFrom jmvcore constructFormula
-#' @importFrom party ctree
-#' @importFrom caret confusionMatrix
-#' @importFrom rpart rpart
-#' @importFrom rpart.plot rpart.plot
-#' @import jmvcore
-#' @import rpart
-#' @import rpart.plot
-#' @import party
-#' @import caret
-#' @export
+
 
 treeClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
     "treeClass",
     inherit = treeBase,
     private = list(
+      .allCache = NULL,
       .htmlwidget = NULL,
       
       
@@ -26,22 +16,6 @@ treeClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
             if (is.null(self$options$dep) | is.null(self$options$covs)) {
                 self$results$instructions$setVisible(visible = TRUE)
             }
-
-            # self$results$instructions$setContent(
-            # "<html>
-            # <head>
-            # </head>
-            # <body>
-            # <div class='instructions'>
-            # <p>____________________________________________________________________________________</p>
-            # <p> 1. The values for the target variable cannot be a number. </p>
-            # <p> 2. Feature requests and bug reports can be made on the <a href='https://github.com/hyunsooseol/snowCluster/issues'  target = '_blank'>GitHub.</a></p>
-            # <p>____________________________________________________________________________________</p>
-            # 
-            # </div>
-            # </body>
-            # </html>"
-            # )
 
           self$results$instructions$setContent(
             private$.htmlwidget$generate_accordion(
@@ -78,8 +52,13 @@ treeClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
              if (is.null(self$options$dep) || length(self$options$covs) == 0)
                  return()
 
-              resdc <- private$.dataClear()
+              #resdc <- private$.dataClear()
 
+              if (is.null(private$.allCache)) {
+                private$.allCache <- private$.dataClear()
+              }
+              
+              resdc<- private$.allCache     
               # ---- Train Data ------------------------- #
               if(self$options$over1 || self$options$tab1) {
 

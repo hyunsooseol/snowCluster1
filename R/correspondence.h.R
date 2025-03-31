@@ -8,6 +8,7 @@ correspondenceOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Cl
         initialize = function(
             labels = NULL,
             vars = NULL,
+            nd = 2,
             chi = TRUE,
             eigen = FALSE,
             rowvar = "coordinates",
@@ -37,6 +38,7 @@ correspondenceOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Cl
                 "labels",
                 labels,
                 suggested=list(
+                    "nominal",
                     "id"),
                 permitted=list(
                     "id",
@@ -49,6 +51,11 @@ correspondenceOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Cl
                     "ordinal"),
                 permitted=list(
                     "factor"))
+            private$..nd <- jmvcore::OptionInteger$new(
+                "nd",
+                nd,
+                default=2,
+                min=2)
             private$..chi <- jmvcore::OptionBool$new(
                 "chi",
                 chi,
@@ -132,6 +139,7 @@ correspondenceOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Cl
 
             self$.addOption(private$..labels)
             self$.addOption(private$..vars)
+            self$.addOption(private$..nd)
             self$.addOption(private$..chi)
             self$.addOption(private$..eigen)
             self$.addOption(private$..rowvar)
@@ -154,6 +162,7 @@ correspondenceOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Cl
     active = list(
         labels = function() private$..labels$value,
         vars = function() private$..vars$value,
+        nd = function() private$..nd$value,
         chi = function() private$..chi$value,
         eigen = function() private$..eigen$value,
         rowvar = function() private$..rowvar$value,
@@ -175,6 +184,7 @@ correspondenceOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Cl
     private = list(
         ..labels = NA,
         ..vars = NA,
+        ..nd = NA,
         ..chi = NA,
         ..eigen = NA,
         ..rowvar = NA,
@@ -230,7 +240,8 @@ correspondenceResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Cl
                     "vars",
                     "labels",
                     "rowvar",
-                    "colvar"),
+                    "colvar",
+                    "nd"),
                 columns=list(
                     list(
                         `name`="name", 
@@ -255,7 +266,8 @@ correspondenceResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Cl
                     "vars",
                     "labels",
                     "rowvar",
-                    "colvar"),
+                    "colvar",
+                    "nd"),
                 columns=list(
                     list(
                         `name`="comp", 
@@ -283,7 +295,8 @@ correspondenceResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Cl
                     "vars",
                     "labels",
                     "rowvar",
-                    "colvar"),
+                    "colvar",
+                    "nd"),
                 columns=list(
                     list(
                         `name`="name", 
@@ -304,7 +317,8 @@ correspondenceResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Cl
                     "vars",
                     "labels",
                     "rowvar",
-                    "colvar"),
+                    "colvar",
+                    "nd"),
                 columns=list(
                     list(
                         `name`="name", 
@@ -330,7 +344,8 @@ correspondenceResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Cl
                     "rowvar",
                     "colvar",
                     "width4",
-                    "height4")))
+                    "height4",
+                    "nd")))
             self$add(jmvcore::Image$new(
                 options=options,
                 name="plot1",
@@ -345,7 +360,8 @@ correspondenceResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Cl
                     "rowvar",
                     "colvar",
                     "width1",
-                    "height1")))
+                    "height1",
+                    "nd")))
             self$add(jmvcore::Image$new(
                 options=options,
                 name="plot2",
@@ -360,7 +376,8 @@ correspondenceResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Cl
                     "rowvar",
                     "colvar",
                     "width2",
-                    "height2")))
+                    "height2",
+                    "nd")))
             self$add(jmvcore::Image$new(
                 options=options,
                 name="plot3",
@@ -375,7 +392,8 @@ correspondenceResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Cl
                     "rowvar",
                     "colvar",
                     "width3",
-                    "height3")))}))
+                    "height3",
+                    "nd")))}))
 
 correspondenceBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
     "correspondenceBase",
@@ -404,6 +422,7 @@ correspondenceBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class
 #' @param data The data as a data frame.
 #' @param labels .
 #' @param vars .
+#' @param nd .
 #' @param chi .
 #' @param eigen .
 #' @param rowvar .
@@ -446,6 +465,7 @@ correspondence <- function(
     data,
     labels,
     vars,
+    nd = 2,
     chi = TRUE,
     eigen = FALSE,
     rowvar = "coordinates",
@@ -481,6 +501,7 @@ correspondence <- function(
     options <- correspondenceOptions$new(
         labels = labels,
         vars = vars,
+        nd = nd,
         chi = chi,
         eigen = eigen,
         rowvar = rowvar,
