@@ -56,7 +56,9 @@ caret(
   height7 = 500,
   plot8 = FALSE,
   width8 = 500,
-  height8 = 500
+  height8 = 500,
+  positive = "no",
+  positive1 = "no"
 )
 }
 \arguments{
@@ -102,7 +104,7 @@ caret(
 
 \item{plot2}{.}
 
-\item{plot3}{.}
+\item{plot3}{Binary dependent required.}
 
 \item{plot4}{.}
 
@@ -163,6 +165,10 @@ caret(
 \item{width8}{.}
 
 \item{height8}{.}
+
+\item{positive}{.}
+
+\item{positive1}{.}
 }
 \value{
 A results object containing:

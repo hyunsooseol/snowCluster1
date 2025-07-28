@@ -10,6 +10,7 @@ kmeans(
   factors,
   k = 2,
   k1 = 2,
+  max = 10,
   kp = FALSE,
   oc = FALSE,
   algo = "Hartigan-Wong",
@@ -18,6 +19,7 @@ kmeans(
   plot = FALSE,
   angle = 0,
   plot1 = FALSE,
+  plot5 = FALSE,
   plot2 = FALSE,
   plot3 = FALSE,
   width = 500,
@@ -27,7 +29,12 @@ kmeans(
   width2 = 500,
   height2 = 500,
   width3 = 500,
-  height3 = 500
+  height3 = 500,
+  plot4 = FALSE,
+  width4 = 500,
+  height4 = 500,
+  width5 = 500,
+  height5 = 500
 )
 }
 \arguments{
@@ -40,6 +47,8 @@ kmeans(
 \item{k}{.}
 
 \item{k1}{.}
+
+\item{max}{.}
 
 \item{kp}{.}
 
@@ -57,6 +66,8 @@ kmeans(
 where 0 degrees represents completely horizontal labels.}
 
 \item{plot1}{.}
+
+\item{plot5}{.}
 
 \item{plot2}{.}
 
@@ -77,6 +88,16 @@ where 0 degrees represents completely horizontal labels.}
 \item{width3}{.}
 
 \item{height3}{.}
+
+\item{plot4}{.}
+
+\item{width4}{.}
+
+\item{height4}{.}
+
+\item{width5}{.}
+
+\item{height5}{.}
 }
 \value{
 A results object containing:
@@ -88,12 +109,14 @@ A results object containing:
   \code{results$centroids} \tab \tab \tab \tab \tab a table \cr
   \code{results$plot} \tab \tab \tab \tab \tab an image \cr
   \code{results$plot1} \tab \tab \tab \tab \tab an image \cr
+  \code{results$plot5} \tab \tab \tab \tab \tab an image \cr
   \code{results$plot2} \tab \tab \tab \tab \tab an image \cr
   \code{results$plot3} \tab \tab \tab \tab \tab an image \cr
   \code{results$clust} \tab \tab \tab \tab \tab an output \cr
   \code{results$clust1} \tab \tab \tab \tab \tab an output \cr
   \code{results$oc} \tab \tab \tab \tab \tab a table \cr
   \code{results$kp} \tab \tab \tab \tab \tab a table \cr
+  \code{results$plot4} \tab \tab \tab \tab \tab an image \cr
 }
 
 Tables can be converted to data frames with \code{asDF} or \code{\link{as.data.frame}}. For example:

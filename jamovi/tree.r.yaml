@@ -51,7 +51,7 @@ items:
         - dep
         - per
         - facs
-        
+
       columns:
         - name: name
           title: ''
@@ -96,6 +96,7 @@ items:
         - dep
         - per
         - facs
+        - positive
         
       columns:
         - name: name
@@ -113,6 +114,7 @@ items:
         - dep
         - per
         - facs
+        - positive
  
       columns:
         - name: name
@@ -148,7 +150,7 @@ items:
         - facs
         - per
         - width1
-        - height1       
+        - height1
 
     - name:  plot2
       title: 'Regression tree'
@@ -163,5 +165,5 @@ items:
         - per
         - facs
         - width2
-        - height2          
+        - height2
 ...

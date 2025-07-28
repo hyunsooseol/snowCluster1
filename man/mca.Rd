@@ -8,11 +8,12 @@ mca(
   data,
   facs,
   vars,
+  nd = 2,
   eigen = TRUE,
-  rowvar = "coordinates",
-  loadingind = FALSE,
-  colvar = "coordinates",
-  loadingvar = FALSE,
+  type = "coordinates",
+  type1 = "coordinates",
+  cat = FALSE,
+  ind = FALSE,
   plot1 = FALSE,
   plot2 = FALSE,
   plot3 = FALSE,
@@ -40,15 +41,17 @@ mca(
 
 \item{vars}{.}
 
+\item{nd}{.}
+
 \item{eigen}{.}
 
-\item{rowvar}{.}
+\item{type}{.}
 
-\item{loadingind}{.}
+\item{type1}{.}
 
-\item{colvar}{.}
+\item{cat}{.}
 
-\item{loadingvar}{.}
+\item{ind}{.}
 
 \item{plot1}{.}
 
@@ -90,9 +93,10 @@ mca(
 A results object containing:
 \tabular{llllll}{
   \code{results$instructions} \tab \tab \tab \tab \tab a html \cr
+  \code{results$text} \tab \tab \tab \tab \tab a preformatted \cr
   \code{results$eigen} \tab \tab \tab \tab \tab a table \cr
-  \code{results$loadingvar} \tab \tab \tab \tab \tab a table \cr
-  \code{results$loadingind} \tab \tab \tab \tab \tab a table \cr
+  \code{results$cat} \tab \tab \tab \tab \tab a table \cr
+  \code{results$ind} \tab \tab \tab \tab \tab a table \cr
   \code{results$plot5} \tab \tab \tab \tab \tab an image \cr
   \code{results$plot6} \tab \tab \tab \tab \tab an image \cr
   \code{results$plot1} \tab \tab \tab \tab \tab an image \cr

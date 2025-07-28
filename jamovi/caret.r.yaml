@@ -116,6 +116,7 @@ items:
         - rep
         - tune1        
         - trans
+        - positive1
         
       columns:
         - name: name
@@ -143,6 +144,7 @@ items:
         - rep
         - tune1        
         - trans
+        - positive
       refs: caret    
 
       columns:
@@ -172,6 +174,7 @@ items:
         - rep
         - tune1
         - trans
+        - positive1
         
       columns:
         - name: name
@@ -200,7 +203,8 @@ items:
         - rep
         - tune1        
         - trans
-        
+        - positive
+
       columns:
         - name: name
           title: ''
@@ -259,7 +263,7 @@ items:
         - trans
         - width8
         - height8        
- 
+
     - name:  plot
       title:  'Comparison of ROC curves'                
       type:  Image
@@ -390,7 +394,7 @@ items:
         - trans
         - width5
         - height5
-        
+
     - name:  plot6
       title: Density plot              
       type:  Image
@@ -535,7 +539,7 @@ items:
         - trans
         - width7
         - height7
-        
+
     - name: pred
       title: Prediction
       type: Output
@@ -555,5 +559,5 @@ items:
         - ml
         - me
         - trans
-        
+
 ...
