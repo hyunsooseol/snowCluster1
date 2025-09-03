@@ -30,13 +30,27 @@ options:
       title: Method
       type: List
       options:
-        - title: lm
-          name:  'lm'
-        - title: glm
-          name:  'glm'
-        - title: loess
-          name:  'loess'
-      default: 'loess'
+        - name: lm
+          title: "lm"
+        - name: glm
+          title: "glm"
+        - name: loess
+          title: "loess"
+      default: loess
+
+    - name: seasonality
+      title: Seasonality
+      type: List
+      options:
+        - name: none
+          title: "None"
+        - name: weekly
+          title: "Weekly"
+        - name: yearly
+          title: "Yearly"
+        - name: weekly_yearly
+          title: "Weekly + Yearly"
+      default: none
 
     - name: plot1
       title: 'Forecast' 
@@ -58,19 +72,19 @@ options:
       title: Unit
       type: List
       options:
-        - title: hour
-          name:  'hour'
-        - title: day
-          name:  'day'
-        - title: week
-          name:  'week'
-        - title: month
-          name:  'month'
-        - title: quarter
-          name:  'quarter'
-        - title: year
-          name:  'year'           
-      default: 'day'      
+        - name: hour
+          title: "hour"
+        - name: day
+          title: "day"
+        - name: week
+          title: "week"
+        - name: month
+          title: "month"
+        - name: quarter
+          title: "quarter"
+        - name: year
+          title: "year"
+      default: day
 
     - name: width
       type: Integer
@@ -84,10 +98,80 @@ options:
       
     - name: width1
       type: Integer
-      title: "Size: "
+      title: "Width "
       default: 500
       
     - name: height1
+      type: Integer
+      title: "Height"
+      default: 500        
+
+    - name: accuracy
+      title:  'Model accuracy'
+      type: Bool
+      default: TRUE
+
+
+    - name: regressors
+      title: Extra Regressors (exogenous vars)
+      type: Variables
+      suggested: 
+        - continuous
+    
+    - name: reg_prior_scale
+      title: Regressor Prior Scale
+      type: Number
+      default: 10
+      min: 0.01
+      max: 100
+
+    - name: reg_future_fill
+      title: Future Values for Regressors
+      type: List
+      options:
+            - name: last
+              title:  "Carry last observed value"
+            - name: zero
+              title: "Use zero"      
+      default: last
+
+    - name: growth
+      title: Growth
+      type: List
+      options:
+            - name: linear
+              title:  "Linear"
+            - name: logistic
+              title: "Logistic"      
+      default: linear
+
+
+    - name: cp_scale
+      title: Changepoint Prior Scale
+      type: Number
+      default: 0.05
+    
+    - name: n_chgpts
+      title: Number of Changepoints
+      type: Integer
+      default: 25
+    
+    - name: cp_range
+      title: Changepoint Range
+      type: Number
+      default: 0.8
+
+    - name: plotAcc
+      title: 'MAPE comparison'
+      type: Bool
+      default: false
+
+    - name: width2
+      type: Integer
+      title: "Size: "
+      default: 500
+      
+    - name: height2
       type: Integer
       title: "X"
       default: 500

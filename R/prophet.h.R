@@ -9,6 +9,7 @@ prophetOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             dep = NULL,
             covs = NULL,
             method = "loess",
+            seasonality = "none",
             plot1 = TRUE,
             plot2 = FALSE,
             periods = 365,
@@ -16,7 +17,18 @@ prophetOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             width = 500,
             height = 500,
             width1 = 500,
-            height1 = 500, ...) {
+            height1 = 500,
+            accuracy = TRUE,
+            regressors = NULL,
+            reg_prior_scale = 10,
+            reg_future_fill = "last",
+            growth = "linear",
+            cp_scale = 0.05,
+            n_chgpts = 25,
+            cp_range = 0.8,
+            plotAcc = FALSE,
+            width2 = 500,
+            height2 = 500, ...) {
 
             super$initialize(
                 package="snowCluster",
@@ -46,6 +58,15 @@ prophetOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                     "glm",
                     "loess"),
                 default="loess")
+            private$..seasonality <- jmvcore::OptionList$new(
+                "seasonality",
+                seasonality,
+                options=list(
+                    "none",
+                    "weekly",
+                    "yearly",
+                    "weekly_yearly"),
+                default="none")
             private$..plot1 <- jmvcore::OptionBool$new(
                 "plot1",
                 plot1,
@@ -86,10 +107,64 @@ prophetOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                 "height1",
                 height1,
                 default=500)
+            private$..accuracy <- jmvcore::OptionBool$new(
+                "accuracy",
+                accuracy,
+                default=TRUE)
+            private$..regressors <- jmvcore::OptionVariables$new(
+                "regressors",
+                regressors,
+                suggested=list(
+                    "continuous"))
+            private$..reg_prior_scale <- jmvcore::OptionNumber$new(
+                "reg_prior_scale",
+                reg_prior_scale,
+                default=10,
+                min=0.01,
+                max=100)
+            private$..reg_future_fill <- jmvcore::OptionList$new(
+                "reg_future_fill",
+                reg_future_fill,
+                options=list(
+                    "last",
+                    "zero"),
+                default="last")
+            private$..growth <- jmvcore::OptionList$new(
+                "growth",
+                growth,
+                options=list(
+                    "linear",
+                    "logistic"),
+                default="linear")
+            private$..cp_scale <- jmvcore::OptionNumber$new(
+                "cp_scale",
+                cp_scale,
+                default=0.05)
+            private$..n_chgpts <- jmvcore::OptionInteger$new(
+                "n_chgpts",
+                n_chgpts,
+                default=25)
+            private$..cp_range <- jmvcore::OptionNumber$new(
+                "cp_range",
+                cp_range,
+                default=0.8)
+            private$..plotAcc <- jmvcore::OptionBool$new(
+                "plotAcc",
+                plotAcc,
+                default=FALSE)
+            private$..width2 <- jmvcore::OptionInteger$new(
+                "width2",
+                width2,
+                default=500)
+            private$..height2 <- jmvcore::OptionInteger$new(
+                "height2",
+                height2,
+                default=500)
 
             self$.addOption(private$..dep)
             self$.addOption(private$..covs)
             self$.addOption(private$..method)
+            self$.addOption(private$..seasonality)
             self$.addOption(private$..plot1)
             self$.addOption(private$..plot2)
             self$.addOption(private$..periods)
@@ -98,11 +173,23 @@ prophetOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             self$.addOption(private$..height)
             self$.addOption(private$..width1)
             self$.addOption(private$..height1)
+            self$.addOption(private$..accuracy)
+            self$.addOption(private$..regressors)
+            self$.addOption(private$..reg_prior_scale)
+            self$.addOption(private$..reg_future_fill)
+            self$.addOption(private$..growth)
+            self$.addOption(private$..cp_scale)
+            self$.addOption(private$..n_chgpts)
+            self$.addOption(private$..cp_range)
+            self$.addOption(private$..plotAcc)
+            self$.addOption(private$..width2)
+            self$.addOption(private$..height2)
         }),
     active = list(
         dep = function() private$..dep$value,
         covs = function() private$..covs$value,
         method = function() private$..method$value,
+        seasonality = function() private$..seasonality$value,
         plot1 = function() private$..plot1$value,
         plot2 = function() private$..plot2$value,
         periods = function() private$..periods$value,
@@ -110,11 +197,23 @@ prophetOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
         width = function() private$..width$value,
         height = function() private$..height$value,
         width1 = function() private$..width1$value,
-        height1 = function() private$..height1$value),
+        height1 = function() private$..height1$value,
+        accuracy = function() private$..accuracy$value,
+        regressors = function() private$..regressors$value,
+        reg_prior_scale = function() private$..reg_prior_scale$value,
+        reg_future_fill = function() private$..reg_future_fill$value,
+        growth = function() private$..growth$value,
+        cp_scale = function() private$..cp_scale$value,
+        n_chgpts = function() private$..n_chgpts$value,
+        cp_range = function() private$..cp_range$value,
+        plotAcc = function() private$..plotAcc$value,
+        width2 = function() private$..width2$value,
+        height2 = function() private$..height2$value),
     private = list(
         ..dep = NA,
         ..covs = NA,
         ..method = NA,
+        ..seasonality = NA,
         ..plot1 = NA,
         ..plot2 = NA,
         ..periods = NA,
@@ -122,7 +221,18 @@ prophetOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
         ..width = NA,
         ..height = NA,
         ..width1 = NA,
-        ..height1 = NA)
+        ..height1 = NA,
+        ..accuracy = NA,
+        ..regressors = NA,
+        ..reg_prior_scale = NA,
+        ..reg_future_fill = NA,
+        ..growth = NA,
+        ..cp_scale = NA,
+        ..n_chgpts = NA,
+        ..cp_range = NA,
+        ..plotAcc = NA,
+        ..width2 = NA,
+        ..height2 = NA)
 )
 
 prophetResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
@@ -130,7 +240,10 @@ prophetResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
     inherit = jmvcore::Group,
     active = list(
         instructions = function() private$.items[["instructions"]],
+        progressBarHTML = function() private$.items[["progressBarHTML"]],
         text = function() private$.items[["text"]],
+        accuracy = function() private$.items[["accuracy"]],
+        plotAcc = function() private$.items[["plotAcc"]],
         plot1 = function() private$.items[["plot1"]],
         plot2 = function() private$.items[["plot2"]]),
     private = list(),
@@ -146,10 +259,84 @@ prophetResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                 name="instructions",
                 title="Instructions",
                 visible=TRUE))
+            self$add(jmvcore::Html$new(
+                options=options,
+                name="progressBarHTML",
+                title=" ",
+                visible=FALSE))
             self$add(jmvcore::Preformatted$new(
                 options=options,
                 name="text",
                 title=""))
+            self$add(jmvcore::Table$new(
+                options=options,
+                name="accuracy",
+                title="Model Accuracy",
+                rows=0,
+                clearWith=list(
+                    "dep",
+                    "covs",
+                    "periods",
+                    "unit",
+                    "growth",
+                    "cp_scale",
+                    "n_chgpts",
+                    "cp_range",
+                    "daily",
+                    "weekly",
+                    "yearly",
+                    "season_mode",
+                    "interval_width",
+                    "mcmc_samples",
+                    "regressors",
+                    "reg_prior_scale",
+                    "reg_future_fill",
+                    "seasonality"),
+                columns=list(
+                    list(
+                        `name`="variable", 
+                        `title`="Variable", 
+                        `type`="Text"),
+                    list(
+                        `name`="MAE", 
+                        `title`="MAE", 
+                        `type`="Number"),
+                    list(
+                        `name`="RMSE", 
+                        `title`="RMSE", 
+                        `type`="Number"),
+                    list(
+                        `name`="MAPE", 
+                        `title`="MAPE", 
+                        `type`="Number"))))
+            self$add(jmvcore::Image$new(
+                options=options,
+                name="plotAcc",
+                title="MAPE comparison",
+                refs="prophet",
+                renderFun=".plotAcc",
+                visible="(accuracy)",
+                clearWith=list(
+                    "dep",
+                    "covs",
+                    "periods",
+                    "unit",
+                    "growth",
+                    "cp_scale",
+                    "n_chgpts",
+                    "cp_range",
+                    "daily",
+                    "weekly",
+                    "yearly",
+                    "season_mode",
+                    "interval_width",
+                    "mcmc_samples",
+                    "regressors",
+                    "reg_prior_scale",
+                    "reg_future_fill",
+                    "width2",
+                    "height2",
+                    "seasonality")))
             self$add(jmvcore::Image$new(
                 options=options,
                 name="plot1",
@@ -163,7 +350,21 @@ prophetResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                     "periods",
                     "unit",
                     "width",
-                    "height")))
+                    "height",
+                    "growth",
+                    "cp_scale",
+                    "n_chgpts",
+                    "cp_range",
+                    "daily",
+                    "weekly",
+                    "yearly",
+                    "season_mode",
+                    "interval_width",
+                    "mcmc_samples",
+                    "regressors",
+                    "reg_prior_scale",
+                    "reg_future_fill",
+                    "seasonality")))
             self$add(jmvcore::Image$new(
                 options=options,
                 name="plot2",
@@ -178,7 +379,21 @@ prophetResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                     "periods",
                     "unit",
                     "width1",
-                    "height1")))}))
+                    "height1",
+                    "growth",
+                    "cp_scale",
+                    "n_chgpts",
+                    "cp_range",
+                    "daily",
+                    "weekly",
+                    "yearly",
+                    "season_mode",
+                    "interval_width",
+                    "mcmc_samples",
+                    "regressors",
+                    "reg_prior_scale",
+                    "reg_future_fill",
+                    "seasonality")))}))
 
 prophetBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
     "prophetBase",
@@ -208,6 +423,7 @@ prophetBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
 #' @param dep .
 #' @param covs .
 #' @param method .
+#' @param seasonality .
 #' @param plot1 .
 #' @param plot2 .
 #' @param periods .
@@ -216,13 +432,33 @@ prophetBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
 #' @param height .
 #' @param width1 .
 #' @param height1 .
+#' @param accuracy .
+#' @param regressors .
+#' @param reg_prior_scale .
+#' @param reg_future_fill .
+#' @param growth .
+#' @param cp_scale .
+#' @param n_chgpts .
+#' @param cp_range .
+#' @param plotAcc .
+#' @param width2 .
+#' @param height2 .
 #' @return A results object containing:
 #' \tabular{llllll}{
 #'   \code{results$instructions} \tab \tab \tab \tab \tab a html \cr
+#'   \code{results$progressBarHTML} \tab \tab \tab \tab \tab a html \cr
 #'   \code{results$text} \tab \tab \tab \tab \tab a preformatted \cr
+#'   \code{results$accuracy} \tab \tab \tab \tab \tab a table \cr
+#'   \code{results$plotAcc} \tab \tab \tab \tab \tab an image \cr
 #'   \code{results$plot1} \tab \tab \tab \tab \tab an image \cr
 #'   \code{results$plot2} \tab \tab \tab \tab \tab an image \cr
 #' }
+#'
+#' Tables can be converted to data frames with \code{asDF} or \code{\link{as.data.frame}}. For example:
+#'
+#' \code{results$accuracy$asDF}
+#'
+#' \code{as.data.frame(results$accuracy)}
 #'
 #' @export
 prophet <- function(
@@ -230,6 +466,7 @@ prophet <- function(
     dep,
     covs,
     method = "loess",
+    seasonality = "none",
     plot1 = TRUE,
     plot2 = FALSE,
     periods = 365,
@@ -237,18 +474,31 @@ prophet <- function(
     width = 500,
     height = 500,
     width1 = 500,
-    height1 = 500) {
+    height1 = 500,
+    accuracy = TRUE,
+    regressors,
+    reg_prior_scale = 10,
+    reg_future_fill = "last",
+    growth = "linear",
+    cp_scale = 0.05,
+    n_chgpts = 25,
+    cp_range = 0.8,
+    plotAcc = FALSE,
+    width2 = 500,
+    height2 = 500) {
 
     if ( ! requireNamespace("jmvcore", quietly=TRUE))
         stop("prophet requires jmvcore to be installed (restart may be required)")
 
     if ( ! missing(dep)) dep <- jmvcore::resolveQuo(jmvcore::enquo(dep))
     if ( ! missing(covs)) covs <- jmvcore::resolveQuo(jmvcore::enquo(covs))
+    if ( ! missing(regressors)) regressors <- jmvcore::resolveQuo(jmvcore::enquo(regressors))
     if (missing(data))
         data <- jmvcore::marshalData(
             parent.frame(),
             `if`( ! missing(dep), dep, NULL),
-            `if`( ! missing(covs), covs, NULL))
+            `if`( ! missing(covs), covs, NULL),
+            `if`( ! missing(regressors), regressors, NULL))
 
     for (v in dep) if (v %in% names(data)) data[[v]] <- as.factor(data[[v]])
 
@@ -256,6 +506,7 @@ prophet <- function(
         dep = dep,
         covs = covs,
         method = method,
+        seasonality = seasonality,
         plot1 = plot1,
         plot2 = plot2,
         periods = periods,
@@ -263,7 +514,18 @@ prophet <- function(
         width = width,
         height = height,
         width1 = width1,
-        height1 = height1)
+        height1 = height1,
+        accuracy = accuracy,
+        regressors = regressors,
+        reg_prior_scale = reg_prior_scale,
+        reg_future_fill = reg_future_fill,
+        growth = growth,
+        cp_scale = cp_scale,
+        n_chgpts = n_chgpts,
+        cp_range = cp_range,
+        plotAcc = plotAcc,
+        width2 = width2,
+        height2 = height2)
 
     analysis <- prophetClass$new(
         options = options,
