@@ -55,7 +55,7 @@ options:
     - name: plot1
       title: 'Forecast' 
       type: Bool
-      default: TRUE
+      default: false
 
     - name: plot2
       title: 'Smooth' 
@@ -113,10 +113,12 @@ options:
 
 
     - name: regressors
-      title: Extra Regressors (exogenous vars)
+      title: Extra Regressors 
       type: Variables
-      suggested: 
+      suggested:
         - continuous
+      permitted:
+        - numeric
     
     - name: reg_prior_scale
       title: Regressor Prior Scale
